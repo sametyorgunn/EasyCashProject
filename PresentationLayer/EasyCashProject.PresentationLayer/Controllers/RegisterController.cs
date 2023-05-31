@@ -58,7 +58,7 @@ namespace EasyCashProject.PresentationLayer.Controllers
                     client.Connect("smtp.gmail.com",587,false);
                     client.Authenticate("alefhigh17@gmail.com","");
                     client.Send(mimemessage);
-                    client.Disconnect();
+                    client.Disconnect(true);
 
                     return RedirectToAction("Index", "ConfirmMail");
                 }
