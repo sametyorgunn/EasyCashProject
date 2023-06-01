@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace EasyCashProject.DataAccessLayer.Abstract
 {
-    public interface ICustomerAccountDal:IGenericDal<CustomerAccount>
+    public interface IAppUserDal:IGenericDal<AppUser>
     {
-        
+        void GetUserByMail(string mail, int confirmcode);
     }
 }

@@ -43,8 +43,8 @@ namespace EasyCashProject.PresentationLayer.Controllers
                     int confirmcode = rand.Next(100000, 999999);
 
                     MimeMessage mimemessage = new MimeMessage();
-                    MailboxAddress mailboxadresfrom = new MailboxAddress("easycashadmin", "alefhigh17@gmail.com");
-                    MailboxAddress mailboxadresTo = new MailboxAddress("User",user.Email);
+                    MailboxAddress mailboxadresfrom = new MailboxAddress("Easy Cash", "alefhigh17@gmail.com");
+                    MailboxAddress mailboxadresTo = new MailboxAddress("User","asametyorgun60@gmail.com"); //user.Email
 
                     mimemessage.From.Add(mailboxadresfrom);
                     mimemessage.To.Add(mailboxadresTo);
@@ -56,11 +56,15 @@ namespace EasyCashProject.PresentationLayer.Controllers
 
                     SmtpClient client = new SmtpClient();
                     client.Connect("smtp.gmail.com",587,false);
-                    client.Authenticate("alefhigh17@gmail.com","");
+                    client.Authenticate("alefhigh17@gmail.com", "dqvqpseevktkcdgb");
                     client.Send(mimemessage);
                     client.Disconnect(true);
 
-                    return RedirectToAction("Index", "ConfirmMail");
+
+                    HttpContext.Session.SetInt32("confirmno", confirmcode);
+                    HttpContext.Session.SetString("confirmMailAdres", user.Email);
+
+                    return RedirectToAction("MailConfirmLinkPage", "Register");
                 }
                 else
                 {
@@ -70,6 +74,11 @@ namespace EasyCashProject.PresentationLayer.Controllers
                     }
                 }
             }
+            return View();
+        }
+
+        public IActionResult MailConfirmLinkPage()
+        {
             return View();
         }
     }

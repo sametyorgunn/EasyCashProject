@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasyCashProject.DataAccessLayer.Abstract
+namespace EasyCashProject.BusinessLayer.Abstract
 {
-    public interface ICustomerAccountDal:IGenericDal<CustomerAccount>
+    public interface IAppUserService:IGenericService<AppUser>
     {
-        
+        void TGetUserByMail(string mail,int confirmcode);
+
     }
 }
