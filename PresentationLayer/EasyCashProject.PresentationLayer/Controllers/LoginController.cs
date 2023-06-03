@@ -36,7 +36,8 @@ namespace EasyCashProject.PresentationLayer.Controllers
                     {
                         return RedirectToAction("Index","MailConfirm");
                     }
-                    return RedirectToAction("Index", "Profile");
+                    return RedirectToAction("Index", "Profile", new { areas = "Customer"});
+                    //return Redirect("Customer/Profile/Index");
                 }
                 else
                 {
