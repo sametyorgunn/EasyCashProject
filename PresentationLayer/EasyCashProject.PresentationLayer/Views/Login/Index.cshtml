@@ -1,12 +1,10 @@
-﻿@using EasyCashProject.DtoLayer.Dtos.AppUserDto
-@model AppUserRegisterDto
+﻿@await Html.PartialAsync("/Views/ErrorPartials/UserNameOrPasswordError.cshtml")
 
-@await Html.PartialAsync("/Views/ErrorPartials/UsernameOrMailRegistered.cshtml")
 <!DOCTYPE html>
 <html>
 <head>
 
-	<title>Kayıt Form</title>
+	<title>Giriş Form</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="keywords" content="Existing Login Form Widget Responsive, Login Form Web Template, Flat Pricing Tables, Flat Drop-Downs, Sign-Up Web Templates, Flat Web Templates, Login Sign-up Responsive Web Template, Smartphone Compatible Web Template, Free Web Designs for Nokia, Samsung, LG, Sony Ericsson, Motorola Web Design">
@@ -18,17 +16,12 @@
 </head>
 <body>
 	<div class="w3layoutscontaineragileits">
-		<h2>Kayıt Ekranı</h2>
+		<h2>Giriş Ekranı</h2>
 		<form action="#" method="post">
-			<input type="text" asp-for="Name" placeholder="İsim" required="">
-			<input type="text" asp-for="Surname" placeholder="Soyisim" required="">
-			<input type="email" asp-for="Email" placeholder="Mail" required="">
-			<input type="text" asp-for="UserName" placeholder="Kullanıcı Adı" required="">
-			<input type="password" asp-for="Password" placeholder="Şifre" required="">
-			<input type="password" asp-for="ConfirmPassword" placeholder="Şifre Tekrar" required="">
-			<div class="text-white" asp-validation-summary="ModelOnly">
-				@ViewBag.kayitli
-			</div>
+			
+			<input type="text" name="Username" placeholder="Username" required="">
+			<input type="password" name="Password" placeholder="Şifre" required="">
+			
 			<ul class="agileinfotickwthree">
 				<li>
 					<input type="checkbox" id="brand1" value="">
@@ -38,7 +31,7 @@
 			</ul>
 			<div class="aitssendbuttonw3ls">
 				<input type="submit" value="Giriş">
-				<p> Zaten Hesabınız Var mı ? <span>→</span> <a class="w3_play_icon1" href="/Login/Index"> Giriş </a></p>
+				<p> Bir Hesabınız Yok mu  ? <span>→</span> <a class="w3_play_icon1" href="/Register/Index"> Kayıt ol </a></p>
 				<div class="clear"></div>
 			</div>
 		</form>

@@ -33,9 +33,9 @@ namespace EasyCashProject.BusinessLayer.Concrete
             return _appUserDal.GetList();
         }
 
-        public void TGetUserByMail(string mail,int confirmcode)
+        public void TGetUserByMail(string mail)
         {
-           _appUserDal.GetUserByMail(mail,confirmcode);
+           _appUserDal.GetUserByMail(mail);
         }
 
         public void TInsert(AppUser t)

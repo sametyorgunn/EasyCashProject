@@ -8,6 +8,7 @@ namespace EasyCashProject.DtoLayer.Dtos.ConfirmMail
 {
     public class ConfirmMailDto
     {
-        public int ConfirmMail { get; set; }
+        public int ConfirmCode { get; set; }
+        public string Mail { get; set; }
     }
 }

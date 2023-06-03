@@ -24,27 +24,41 @@ namespace EasyCashProject.PresentationLayer.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(AppUserRegisterDto dto)
         {
-            if (ModelState.IsValid)
+            var usermail = await _userManager.FindByEmailAsync(dto.Email);
+            var username = await _userManager.FindByNameAsync(dto.UserName);
+
+            if (ModelState.IsValid && dto.Password == dto.ConfirmPassword)
             {
+                if(usermail != null)
+                {
+                    TempData["KullaniciMailAdresKontrol"] = "Bu mail adresi zaten kayıtlı!!";
+                    return View();
+                }
+                if(username != null)
+                {
+                    TempData["KullaniciAdiKontrol"] = "Bu Kullanıcı Adı zaten kayıtlı!!";
+                    return View();
+                }
+
+                Random rand = new Random();
+                int confirmcode = rand.Next(100000, 999999);
                 AppUser user = new AppUser
                 {
                     Email = dto.Email,
                     Name= dto.Name,
                     UserName = dto.UserName,
                     Surname= dto.Surname,
-                    Status = "0"
+                    Status = "0",
+                    ConfirmCode = confirmcode
                    
                 };
                 var result = await _userManager.CreateAsync(user, dto.Password);
-                
                 if(result.Succeeded)
                 {
-                    Random rand = new Random();
-                    int confirmcode = rand.Next(100000, 999999);
 
                     MimeMessage mimemessage = new MimeMessage();
                     MailboxAddress mailboxadresfrom = new MailboxAddress("Easy Cash", "alefhigh17@gmail.com");
-                    MailboxAddress mailboxadresTo = new MailboxAddress("User","asametyorgun60@gmail.com"); //user.Email
+                    MailboxAddress mailboxadresTo = new MailboxAddress("User",user.Email);
 
                     mimemessage.From.Add(mailboxadresfrom);
                     mimemessage.To.Add(mailboxadresTo);

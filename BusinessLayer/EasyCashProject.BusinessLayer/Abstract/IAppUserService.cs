@@ -9,7 +9,7 @@ namespace EasyCashProject.BusinessLayer.Abstract
 {
     public interface IAppUserService:IGenericService<AppUser>
     {
-        void TGetUserByMail(string mail,int confirmcode);
+        void TGetUserByMail(string mail);
 
     }
 }

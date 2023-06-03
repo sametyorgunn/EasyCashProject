@@ -9,6 +9,6 @@ namespace EasyCashProject.DataAccessLayer.Abstract
 {
     public interface IAppUserDal:IGenericDal<AppUser>
     {
-        void GetUserByMail(string mail, int confirmcode);
+        void GetUserByMail(string mail);
     }
 }
