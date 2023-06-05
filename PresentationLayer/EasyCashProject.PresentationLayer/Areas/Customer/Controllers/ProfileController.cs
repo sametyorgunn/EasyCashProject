@@ -47,7 +47,8 @@ namespace EasyCashProject.PresentationLayer.Areas.Customer.Controllers
             user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, dto.Password);
 
             await _userManager.UpdateAsync(user);
-            return RedirectToAction("Index","Profile");
+            return Redirect("/Customer/Profile/Index");
+            //return RedirectToAction("Index","Profile");
         }
     }
 }
