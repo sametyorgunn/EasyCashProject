@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyCashProject.DataAccessLayer.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230528204313_appuser_approle_tables")]
-    partial class appuser_approle_tables
+    [Migration("20230607202229_tth")]
+    partial class tth
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,6 +35,9 @@ namespace EasyCashProject.DataAccessLayer.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("CustomerAccountID")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("ProcessDate")
                         .HasColumnType("datetime2");
 
@@ -42,7 +45,15 @@ namespace EasyCashProject.DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ReceiverID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SenderID")
+                        .HasColumnType("int");
+
                     b.HasKey("CustomerAccountProcessID");
+
+                    b.HasIndex("CustomerAccountID");
 
                     b.ToTable("AccountProcesses");
                 });
@@ -89,15 +100,16 @@ namespace EasyCashProject.DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ConfirmCode")
+                        .HasColumnType("int");
+
                     b.Property<string>("District")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -108,7 +120,6 @@ namespace EasyCashProject.DataAccessLayer.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -139,6 +150,9 @@ namespace EasyCashProject.DataAccessLayer.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
@@ -173,6 +187,9 @@ namespace EasyCashProject.DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerAccountID"), 1L, 1);
 
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("BankBranch")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -189,6 +206,8 @@ namespace EasyCashProject.DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CustomerAccountID");
+
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("CustomerAccounts");
                 });
@@ -296,6 +315,26 @@ namespace EasyCashProject.DataAccessLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("EasyCashProject.EntityLayer.Concrete.AccountProcess", b =>
+                {
+                    b.HasOne("EasyCashProject.EntityLayer.Concrete.CustomerAccount", null)
+                        .WithMany("Process")
+                        .HasForeignKey("CustomerAccountID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EasyCashProject.EntityLayer.Concrete.CustomerAccount", b =>
+                {
+                    b.HasOne("EasyCashProject.EntityLayer.Concrete.AppUser", "AppUser")
+                        .WithMany("CustomerAccounts")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("EasyCashProject.EntityLayer.Concrete.AppRole", null)
@@ -345,6 +384,16 @@ namespace EasyCashProject.DataAccessLayer.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EasyCashProject.EntityLayer.Concrete.AppUser", b =>
+                {
+                    b.Navigation("CustomerAccounts");
+                });
+
+            modelBuilder.Entity("EasyCashProject.EntityLayer.Concrete.CustomerAccount", b =>
+                {
+                    b.Navigation("Process");
                 });
 #pragma warning restore 612, 618
         }

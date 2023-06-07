@@ -9,5 +9,7 @@ namespace EasyCashProject.DataAccessLayer.Abstract
 {
     public interface ICustomerAccountProcessDal:IGenericDal<AccountProcess>
     {
+        CustomerAccount TGetIdByAccountNumber(string accountNumber);
+
     }
 }

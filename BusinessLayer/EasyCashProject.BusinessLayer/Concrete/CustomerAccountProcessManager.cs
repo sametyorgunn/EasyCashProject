@@ -28,6 +28,11 @@ namespace EasyCashProject.BusinessLayer.Concrete
             return _costumerAccountProcessDal.GetById(id);
         }
 
+        public CustomerAccount TGetIdByAccountNumber(string accountNumber)
+        {
+            return _costumerAccountProcessDal.TGetIdByAccountNumber(accountNumber);
+        }
+
         public List<AccountProcess> TGetList()
         {
             return _costumerAccountProcessDal.GetList();

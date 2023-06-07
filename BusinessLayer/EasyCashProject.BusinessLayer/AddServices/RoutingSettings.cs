@@ -17,7 +17,10 @@ namespace EasyCashProject.BusinessLayer.AddServices
         {
             services.AddScoped<IAppUserService, AppUserManager>();
             services.AddScoped<IAppUserDal, EfAppUserRepository>();
-           
+
+            services.AddScoped<ICustomerAccountProcessService, CustomerAccountProcessManager>();
+            services.AddScoped<ICustomerAccountProcessDal, EfAccountProcessRepository>();
+
         }
     }
 }

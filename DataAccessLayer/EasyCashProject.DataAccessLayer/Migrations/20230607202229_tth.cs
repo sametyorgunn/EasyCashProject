@@ -5,25 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EasyCashProject.DataAccessLayer.Migrations
 {
-    public partial class appuser_approle_tables : Migration
+    public partial class tth : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AccountProcesses",
-                columns: table => new
-                {
-                    CustomerAccountProcessID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProcessType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ProcessDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AccountProcesses", x => x.CustomerAccountProcessID);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -47,9 +32,11 @@ namespace EasyCashProject.DataAccessLayer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConfirmCode = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -68,22 +55,6 @@ namespace EasyCashProject.DataAccessLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CustomerAccounts",
-                columns: table => new
-                {
-                    CustomerAccountID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CustomerAccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CustomerAccountCurrency = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CustomerAccountBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    BankBranch = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomerAccounts", x => x.CustomerAccountID);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,6 +163,58 @@ namespace EasyCashProject.DataAccessLayer.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CustomerAccounts",
+                columns: table => new
+                {
+                    CustomerAccountID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerAccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerAccountCurrency = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerAccountBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    BankBranch = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AppUserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerAccounts", x => x.CustomerAccountID);
+                    table.ForeignKey(
+                        name: "FK_CustomerAccounts_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AccountProcesses",
+                columns: table => new
+                {
+                    CustomerAccountProcessID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProcessType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ProcessDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SenderID = table.Column<int>(type: "int", nullable: true),
+                    ReceiverID = table.Column<int>(type: "int", nullable: true),
+                    CustomerAccountID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccountProcesses", x => x.CustomerAccountProcessID);
+                    table.ForeignKey(
+                        name: "FK_AccountProcesses_CustomerAccounts_CustomerAccountID",
+                        column: x => x.CustomerAccountID,
+                        principalTable: "CustomerAccounts",
+                        principalColumn: "CustomerAccountID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountProcesses_CustomerAccountID",
+                table: "AccountProcesses",
+                column: "CustomerAccountID");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -230,6 +253,11 @@ namespace EasyCashProject.DataAccessLayer.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerAccounts_AppUserId",
+                table: "CustomerAccounts",
+                column: "AppUserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

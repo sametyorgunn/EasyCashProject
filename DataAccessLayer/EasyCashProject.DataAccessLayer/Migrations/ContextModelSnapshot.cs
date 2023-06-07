@@ -33,6 +33,9 @@ namespace EasyCashProject.DataAccessLayer.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("CustomerAccountID")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("ProcessDate")
                         .HasColumnType("datetime2");
 
@@ -48,9 +51,7 @@ namespace EasyCashProject.DataAccessLayer.Migrations
 
                     b.HasKey("CustomerAccountProcessID");
 
-                    b.HasIndex("ReceiverID");
-
-                    b.HasIndex("SenderID");
+                    b.HasIndex("CustomerAccountID");
 
                     b.ToTable("AccountProcesses");
                 });
@@ -314,17 +315,11 @@ namespace EasyCashProject.DataAccessLayer.Migrations
 
             modelBuilder.Entity("EasyCashProject.EntityLayer.Concrete.AccountProcess", b =>
                 {
-                    b.HasOne("EasyCashProject.EntityLayer.Concrete.CustomerAccount", "ReceiverCustomer")
-                        .WithMany("CustomerReceiver")
-                        .HasForeignKey("ReceiverID");
-
-                    b.HasOne("EasyCashProject.EntityLayer.Concrete.CustomerAccount", "SenderCustomer")
-                        .WithMany("CustomerSender")
-                        .HasForeignKey("SenderID");
-
-                    b.Navigation("ReceiverCustomer");
-
-                    b.Navigation("SenderCustomer");
+                    b.HasOne("EasyCashProject.EntityLayer.Concrete.CustomerAccount", null)
+                        .WithMany("Process")
+                        .HasForeignKey("CustomerAccountID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EasyCashProject.EntityLayer.Concrete.CustomerAccount", b =>
@@ -396,9 +391,7 @@ namespace EasyCashProject.DataAccessLayer.Migrations
 
             modelBuilder.Entity("EasyCashProject.EntityLayer.Concrete.CustomerAccount", b =>
                 {
-                    b.Navigation("CustomerReceiver");
-
-                    b.Navigation("CustomerSender");
+                    b.Navigation("Process");
                 });
 #pragma warning restore 612, 618
         }

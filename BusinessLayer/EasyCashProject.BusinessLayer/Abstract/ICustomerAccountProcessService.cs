@@ -9,5 +9,6 @@ namespace EasyCashProject.BusinessLayer.Abstract
 {
     public interface ICustomerAccountProcessService:IGenericService<AccountProcess>
     {
+        CustomerAccount TGetIdByAccountNumber(string accountNumber);
     }
 }
